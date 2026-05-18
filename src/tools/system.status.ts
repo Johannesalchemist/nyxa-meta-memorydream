@@ -2,10 +2,12 @@ import type { NyxaConfig } from "../config/env.js";
 
 export type SystemStatusResponse = {
   name: "nyxa-governed-memory-mcp";
-  version: "0.1.0";
+  version: "0.2.0";
   agent_mode: string;
   backend: string;
   feature_flags: {
+    candidate_memory_enabled: boolean;
+    dreaming_lab_schema_ready: boolean;
     dreaming_enabled: boolean;
     apprentice_enabled: boolean;
     visual_observation_enabled: boolean;
@@ -22,6 +24,8 @@ export function buildSystemStatus(config: NyxaConfig): SystemStatusResponse {
     agent_mode: config.agentMode,
     backend: config.memoryBackend,
     feature_flags: {
+      candidate_memory_enabled: config.featureFlags.candidateMemoryEnabled,
+      dreaming_lab_schema_ready: config.featureFlags.dreamingLabSchemaReady,
       dreaming_enabled: config.featureFlags.dreamingEnabled,
       apprentice_enabled: config.featureFlags.apprenticeEnabled,
       visual_observation_enabled: config.featureFlags.visualObservationEnabled,

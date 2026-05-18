@@ -1,6 +1,6 @@
 {
-  "name": "nyxa-governed-memory-mcp",
-  "version": "0.1.0",
+  "name": "nyxa-meta-memorydream",
+  "version": "0.2.0",
   "description": "Documentation-first governed memory MCP foundation for Nyxa.",
   "type": "module",
   "main": "dist/index.js",

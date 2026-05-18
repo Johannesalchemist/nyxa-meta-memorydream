@@ -29,7 +29,7 @@ function parseMode(value: string | undefined): NyxaAgentMode {
   }
 
   if (value === "supervised_execute") {
-    throw new Error("supervised_execute_not_allowed_in_v01");
+    throw new Error("supervised_execute_not_allowed_in_v02");
   }
 
   return value;
@@ -52,11 +52,14 @@ function parseBackend(value: string | undefined): MemoryBackendType {
 
 export type NyxaConfig = {
   appName: "nyxa-governed-memory-mcp";
-  version: "0.1.0";
+  version: "0.2.0";
   agentMode: NyxaAgentMode;
   memoryBackend: MemoryBackendType;
   dataDir: string;
+  dreamingLabSchemaVersion: string;
   featureFlags: {
+    candidateMemoryEnabled: boolean;
+    dreamingLabSchemaReady: boolean;
     dreamingEnabled: boolean;
     apprenticeEnabled: boolean;
     visualObservationEnabled: boolean;
@@ -74,8 +77,11 @@ export function loadConfig(): NyxaConfig {
   const agentMode = parseMode(process.env.NYXA_AGENT_MODE);
   const memoryBackend = parseBackend(process.env.NYXA_MEMORY_BACKEND);
   const dataDir = resolve(process.cwd(), process.env.NYXA_DATA_DIR ?? "./data");
+  const dreamingLabSchemaVersion = process.env.NYXA_DREAMING_LAB_SCHEMA_VERSION ?? "0.2-scaffold";
 
   const featureFlags = {
+    candidateMemoryEnabled: parseBoolean(process.env.NYXA_CANDIDATE_MEMORY_ENABLED, true),
+    dreamingLabSchemaReady: true,
     dreamingEnabled: parseBoolean(process.env.NYXA_DREAMING_ENABLED, false),
     apprenticeEnabled: parseBoolean(process.env.NYXA_APPRENTICE_ENABLED, true),
     visualObservationEnabled: parseBoolean(process.env.NYXA_VISUAL_OBSERVATION_ENABLED, false),
@@ -85,19 +91,24 @@ export function loadConfig(): NyxaConfig {
   };
 
   if (featureFlags.authoritativeWritesEnabled) {
-    throw new Error("authoritative_writes_must_be_disabled_in_v01");
+    throw new Error("authoritative_writes_must_be_disabled_in_v02");
   }
 
   if (featureFlags.executionToolsEnabled) {
-    throw new Error("execution_tools_must_be_disabled_in_v01");
+    throw new Error("execution_tools_must_be_disabled_in_v02");
+  }
+
+  if (featureFlags.dreamingEnabled) {
+    throw new Error("dreaming_must_be_disabled_in_v02");
   }
 
   return {
     appName: "nyxa-governed-memory-mcp",
-    version: "0.1.0",
+    version: "0.2.0",
     agentMode,
     memoryBackend,
     dataDir,
+    dreamingLabSchemaVersion,
     featureFlags,
     remoteMemory: {
       url: process.env.NYXA_REMOTE_MEMORY_URL ?? "",

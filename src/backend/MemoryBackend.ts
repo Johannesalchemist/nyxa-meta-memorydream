@@ -1,3 +1,5 @@
+import type { CandidateRecallFilter, MemoryCandidate } from "../schema/candidates.js";
+
 export type MemoryBackendType =
   | "local"
   | "remote"
@@ -13,4 +15,8 @@ export type BackendInfo = {
 export interface MemoryBackend {
   readonly type: MemoryBackendType;
   health(): Promise<BackendInfo>;
+  storeCandidate(candidate: MemoryCandidate): Promise<void>;
+  recallCandidates(filter: CandidateRecallFilter): Promise<MemoryCandidate[]>;
+  getCandidateById(candidateId: string): Promise<MemoryCandidate | null>;
+  rejectCandidate(candidateId: string): Promise<MemoryCandidate | null>;
 }

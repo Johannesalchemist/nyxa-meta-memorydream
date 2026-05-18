@@ -3,3 +3,5 @@ HANDOFF.md
 data/audit.log.jsonl
 dist/
 node_modules/
+data/memory_candidates.jsonl
+.backup-v02-scaffold-*

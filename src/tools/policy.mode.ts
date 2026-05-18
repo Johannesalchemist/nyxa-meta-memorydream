@@ -7,21 +7,24 @@ export type PolicyModeResponse = {
 };
 
 export function buildPolicyMode(config: NyxaConfig): PolicyModeResponse {
+  const allowed = ["read", "observe", "audit", "document_candidates_future"];
+
+  if (config.agentMode !== "observe_only") {
+    allowed.push("documentation_note", "candidate_store", "candidate_reject");
+  }
+
   return {
     mode: config.agentMode,
-    allowed_capabilities: [
-      "read",
-      "observe",
-      "audit",
-      "document_candidates_future"
-    ],
+    allowed_capabilities: allowed,
     blocked_capabilities: [
       "send_email",
       "write_files",
       "execute_shell",
       "modify_external_systems",
       "autonomous_execution",
-      "hidden_screen_capture"
+      "hidden_screen_capture",
+      "authoritative_memory_writes",
+      "dream_run"
     ]
   };
 }

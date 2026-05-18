@@ -7,7 +7,11 @@ export type PolicyDecision = {
   policy?: ToolPolicy;
 };
 
-export function enforcePolicy(toolName: string, mode: NyxaAgentMode): PolicyDecision {
+function isV01(version: string): boolean {
+  return version.startsWith("0.1");
+}
+
+export function enforcePolicy(toolName: string, mode: NyxaAgentMode, version: string): PolicyDecision {
   const policy = TOOL_POLICIES[toolName];
 
   if (!policy) {
@@ -17,7 +21,7 @@ export function enforcePolicy(toolName: string, mode: NyxaAgentMode): PolicyDeci
     };
   }
 
-  if (!policy.allowedInV01) {
+  if (isV01(version) && !policy.allowedInV01) {
     return {
       allowed: false,
       reason: "tool_not_allowed_in_v01",
